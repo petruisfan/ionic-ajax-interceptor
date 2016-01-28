@@ -8,7 +8,8 @@
             title: "Error",
             defaultMessage: "Unknown error",
             authorizationHeader: "Authorization",
-            authorizationToken: null
+            authorizationToken: null,
+            stateChangeError: true
         };
 
         var _ajaxRequestsInQ = 0;
@@ -48,6 +49,10 @@
                 '$ionicLoading',
                 '$rootScope',
                 function($ionicPopup, $ionicLoading, $rootScope) {
+                    /**
+                     * Show loading modal
+                     * @private
+                     */
                     var _showLoading = function() {
                         $ionicLoading.show({
                             content: 'Loading',
@@ -57,22 +62,30 @@
                             showDelay: 0
                         });
                     };
-
+                    /**
+                     * Hide loading modal
+                     * @private
+                     */
                     var _hideLoading = function() {
                         $ionicLoading.hide();
                     };
 
                     return {
+                        /**
+                         * Set up listeners
+                         */
                         run: function() {
-                            //
-                            // Listen for resolved errors in ui-view
-                            //
-                            $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-                                $ionicPopup.alert({
-                                    title: _config.title,
-                                    content: error.message || _config.defaultMessage
+                            if ( _config.stateChangeError ) {
+                                //
+                                // Listen for resolved errors in ui-view
+                                //
+                                $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+                                    $ionicPopup.alert({
+                                        title: _config.title,
+                                        content: error.message || _config.defaultMessage
+                                    });
                                 });
-                            });
+                            }
                             //
                             // Listen for show loading screen event
                             //
@@ -95,12 +108,22 @@
                                 _ajaxRequestsInQ--;
                             });
                         },
+                        /**
+                         *
+                         * @param token
+                         */
                         setAuthorizationToken: function(token) {
                             _config.authorizationToken = token;
                         },
+                        /**
+                         *
+                         */
                         showLoading: function() {
                             _showLoading();
                         },
+                        /**
+                         *
+                         */
                         hideLoading: function() {
                             _hideLoading();
                         }
