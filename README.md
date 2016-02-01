@@ -37,7 +37,9 @@ angular.module('app', ['ionic', 'ionic-ajax-interceptor'])
     })
 ```
 
-Now every time you make a $http request, while the request is in progress, there will be a spinner in front.
+Now every time you make a $http request, while the request is in progress, there will be a spinner in front:
+
+![Example](/screenshots/loading.png?raw=true)
 
 ## Authorization token
 
@@ -51,11 +53,21 @@ and all the following request will have a header added automagically :)
 
 ## Available options:
 
-| key  | Value | Defaul | Why? |
-| ---- | ----- | ------ | ---- |
+| Key  | Type | Defaul | Why? |
+| ---- | ---- | ------ | ---- |
 | stateChangeError | boolean | true | Show a ionic alert every time a "resolve" value failed to return in angular-ui-router. If the resolve failed and the first argument has a "message" key, it will be shown in alert body.  | 
 | title | string | Error | The title of the alert |
 | defaultMessage | string | Unknown error | The body of the alert | 
 | authorizationHeader | string | Authorization | key header to add | 
 | authorizationToken | string | null | value of the header | 
+
+## Methods
+
+| Name | Arguments | Why? |
+| ---- | --------- | ---- |
+| config | options | Use it in a config block to configure available options mentioned above |
+| run | - | Set the interceptors for $http requests. Call this in the run block before other $http calls |
+| setAuthorizationToken | token | Add an 'authorization' header with token value |
+| showLoading | - | Show the loading screen. Useful for long running tasks or other remote operations like connecting to bluetooth |
+| hideLoading | - | Hide the loading screen |
 
