@@ -19,8 +19,6 @@
             stateChangeError: true
         };
 
-        var _ajaxRequestsInQ = 0;
-
         return {
             config: function (options) {
                 angular.extend(_config, options);
@@ -56,25 +54,38 @@
                 '$ionicLoading',
                 '$rootScope',
                 function($ionicPopup, $ionicLoading, $rootScope) {
+
+                    var _ajaxRequestsInQ = 0;
+
                     /**
                      * Show loading modal
                      * @private
                      */
                     var _showLoading = function() {
-                        $ionicLoading.show({
-                            content: 'Loading',
-                            animation: 'fade-in',
-                            showBackdrop: true,
-                            maxWidth: 200,
-                            showDelay: 0
-                        });
+                        if (_ajaxRequestsInQ === 0 ) {
+                            $ionicLoading.show({
+                                content: 'Loading',
+                                animation: 'fade-in',
+                                showBackdrop: true,
+                                maxWidth: 200,
+                                showDelay: 0
+                            });
+                        }
+                        _ajaxRequestsInQ++;
                     };
                     /**
                      * Hide loading modal
                      * @private
                      */
                     var _hideLoading = function() {
-                        $ionicLoading.hide();
+                        _ajaxRequestsInQ--;
+
+                        if ( _ajaxRequestsInQ == 0 ) {
+                            $ionicLoading.hide();
+                        } else if ( _ajaxRequestsInQ < 0 ) {
+                            // make sure _ajaxRequestsInQ doesn't go bellow 0
+                            _ajaxRequestsInQ = 0;
+                        }
                     };
 
                     return {
@@ -97,22 +108,13 @@
                             // Listen for show loading screen event
                             //
                             $rootScope.$on('loading:show', function() {
-                                if (_ajaxRequestsInQ === 0 ) {
-                                    _showLoading();
-                                }
-                                _ajaxRequestsInQ++;
+                                _showLoading();
                             });
                             //
                             // Listen for hide loading screen event
                             //
                             $rootScope.$on('loading:hide', function() {
-                                if (_ajaxRequestsInQ > 0) {
-                                    _hideLoading();
-                                } else {
-                                    // make sure _ajaxRequestsInQ doesn't go bellow 0
-                                    _ajaxRequestsInQ = 1;
-                                }
-                                _ajaxRequestsInQ--;
+                                _hideLoading();
                             });
                         },
                         /**
