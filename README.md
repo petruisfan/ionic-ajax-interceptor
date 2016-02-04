@@ -51,11 +51,18 @@ AjaxInterceptor.setAuthorizationToken(<some token>);
 
 and all the following request will have a header added automagically :)
 
+## UI-router state change error
+
+Every time a resolve fails in a state, a $ionicPopup confirm is shown. 
+If the resolve failed and the error argument has a "message" key, it will be shown in alert body:
+
+![Example](/screenshots/stateChangeError.png?raw=true)
+
 ## Available options:
 
 | Key  | Type | Defaul | Why? |
 | ---- | ---- | ------ | ---- |
-| stateChangeError | boolean | true | Show a ionic alert every time a "resolve" value failed to return in angular-ui-router. If the resolve failed and the first argument has a "message" key, it will be shown in alert body.  | 
+| stateChangeError | boolean | true | Show a ionic alert every time a "resolve" value failed to return in angular-ui-router. | 
 | title | string | Error | The title of the alert |
 | defaultMessage | string | Unknown error | The body of the alert | 
 | authorizationHeader | string | Authorization | key header to add | 
