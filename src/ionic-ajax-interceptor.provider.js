@@ -16,7 +16,7 @@
             config: function (options) {
                 angular.extend(_config, options);
 
-                $httpProvider.interceptors.push(function($rootScope) {
+                $httpProvider.interceptors.push(["$rootScope", function($rootScope) {
                     return {
                         request: function(req) {
                             $rootScope.$broadcast('loading:show');
@@ -40,7 +40,7 @@
                             return err;
                         }
                     }
-                })
+                }])
             },
             $get: [
                 '$ionicPopup',
