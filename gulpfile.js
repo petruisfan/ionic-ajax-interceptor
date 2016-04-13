@@ -1,5 +1,4 @@
 var gulp = require('gulp');
-var del = require('del');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 
@@ -20,3 +19,5 @@ gulp.task('build', function() {
 gulp.task('watch', function() {
     gulp.watch('./src/*', ['build', 'buildmin']);
 });
+
+gulp.task('default', ['build', 'buildmin']);

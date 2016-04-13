@@ -66,7 +66,8 @@ If the resolve failed and the error argument has a "message" key, it will be sho
 | title | string | Error | The title of the alert |
 | defaultMessage | string | Unknown error | The body of the alert | 
 | authorizationHeader | string | Authorization | key header to add | 
-| authorizationToken | string | null | value of the header | 
+| authorizationToken | string | null | value of the header |
+| fallbackIp | string | null | Add a fallback ip. For example if the server DNS is not resolved, try to access it by IP. |
 
 ## Methods
 

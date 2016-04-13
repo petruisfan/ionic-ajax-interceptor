@@ -9,14 +9,15 @@
             defaultMessage: "Unknown error",
             authorizationHeader: "Authorization",
             authorizationToken: null,
-            stateChangeError: true
+            stateChangeError: true,
+            fallbackIp: null
         };
 
         return {
             config: function (options) {
                 angular.extend(_config, options);
 
-                $httpProvider.interceptors.push(["$rootScope", function($rootScope) {
+                $httpProvider.interceptors.push(["$rootScope", "$q", "$injector", function($rootScope, $q, $injector) {
                     return {
                         request: function(req) {
                             $rootScope.$broadcast('loading:show');
@@ -29,15 +30,28 @@
                         },
                         requestError: function(err) {
                             $rootScope.$broadcast('loading:hide');
-                            return err;
+                            return $q.reject(err);
                         },
                         response: function(response) {
                             $rootScope.$broadcast('loading:hide');
                             return response;
                         },
                         responseError : function (err) {
+                            if (err.status == 0) {
+                                var aux = err.config.url.split("/");
+                                //
+                                // Retry once more with fallback ip
+                                //
+                                if (aux[2] !== _config.fallbackIp) {
+                                    aux[2] = _config.fallbackIp;
+                                    err.config.url = aux.join("/");
+
+                                    var $http = $injector.get('$http');
+                                    return $http(err.config);
+                                }
+                            }
                             $rootScope.$broadcast('loading:hide');
-                            return err;
+                            return $q.reject(err);
                         }
                     }
                 }])
