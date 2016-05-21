@@ -44,12 +44,8 @@ angular.module('app', ['ionic', 'ionic-ajax-interceptor'])
 
 ```JavaScript
 var request = {
-    method: 'POST',
-    url: Constants.sfaEndpoint + "ascent_mobility_api/json.php",
-    data: form,
-    headers:{
-        'Content-Type': undefined
-    },
+    method: 'GET',
+    url: Constants.endpoint + "/json",
     iCache: {
         expires: new Date().getTime() + 1000 * 60 // in one minute
     }
