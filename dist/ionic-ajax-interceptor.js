@@ -17,7 +17,10 @@
             authorizationHeader: "Authorization",
             authorizationToken: null,
             stateChangeError: true,
-            fallbackIp: null
+            fallbackIp: null,
+
+            requestTransformer: null,
+            responseTransformer: null
         };
 
         return {
@@ -27,6 +30,8 @@
                 $httpProvider.interceptors.push(["$rootScope", "$q", "$injector", function($rootScope, $q, $injector) {
                     return {
                         request: function(req) {
+                            //console.log(req);
+
                             $rootScope.$broadcast('loading:show');
 
                             if ( _config.authorizationToken ) {
@@ -44,6 +49,7 @@
                             return response;
                         },
                         responseError : function (err) {
+                            //console.log(res);
                             if (err.status == 0) {
                                 var aux = err.config.url.split("/");
                                 //
@@ -61,7 +67,14 @@
                             return $q.reject(err);
                         }
                     }
-                }])
+                }]);
+
+                if (_config.requestTransformer) {
+                    $httpProvider.defaults.transformRequest.push(_config.requestTransformer);
+                }
+                if (_config.responseTransformer) {
+                    $httpProvider.defaults.transformResponse.push(_config.responseTransformer);
+                }
             },
             $get: [
                 '$ionicPopup',
