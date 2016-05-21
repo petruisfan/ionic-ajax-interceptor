@@ -1,11 +1,14 @@
 # ionic-ajax-interceptor
-Ajax interceptor for $http, designed for ionic
+Ajax interceptor for $http, designed for ionic.
 
-Well, theoretically you could just do this: http://learn.ionicframework.com/formulas/loading-screen-with-interceptors/
-But that means copy-pasting some code in your project every time you want to show a loading modal over your app while
-some ajax call loads. And plus, what happens when you have multiple ajax calls in the same time?
-
-This provider is meant to make working with ajax calls much simpler. 
+This library is meant to make working with ajax calls much simpler.
+It's functionalities include:
+ - showing a loading screen during http requests
+ - caching response data in local storage
+ - adding authorization tokens to the request
+ - transforming requests and responses
+ - default error handler for ui-router
+ - fallback ip for cases when dns is not working
 
 ## How to use:
 
@@ -35,6 +38,31 @@ angular.module('app', ['ionic', 'ionic-ajax-interceptor'])
         AjaxInterceptor.run();
         ...
     })
+```
+
+4) Use it just like $http:
+
+```JavaScript
+var request = {
+    method: 'POST',
+    url: Constants.sfaEndpoint + "ascent_mobility_api/json.php",
+    data: form,
+    headers:{
+        'Content-Type': undefined
+    },
+    iCache: {
+        expires: new Date().getTime() + 1000 * 60 // in one minute
+    }
+};
+
+iHttp(request).then(
+    function success(res) {
+        ...
+    },
+    function error(err) {
+        ...    
+    }
+);
 ```
 
 Now every time you make a $http request, while the request is in progress, there will be a spinner in front:
@@ -68,6 +96,9 @@ If the resolve failed and the error argument has a "message" key, it will be sho
 | authorizationHeader | string | Authorization | key header to add | 
 | authorizationToken | string | null | value of the header |
 | fallbackIp | string | null | Add a fallback ip. For example if the server DNS is not resolved, try to access it by IP. |
+| iCache | Object | null | Add caching capabilities |
+| iCache.key | string | request url | The key under which to save the response |
+| iCache.expires | timestamp | null | When should the cached data expire? Null = never |
 
 ## Methods
 
@@ -78,4 +109,8 @@ If the resolve failed and the error argument has a "message" key, it will be sho
 | setAuthorizationToken | token | Add an 'authorization' header with token value |
 | showLoading | - | Show the loading screen. Useful for long running tasks or other remote operations like connecting to bluetooth |
 | hideLoading | - | Hide the loading screen |
+
+## iHttp
+
+iHttp is a service that can be used the same way as $http, but has the added cache functionality.
 
