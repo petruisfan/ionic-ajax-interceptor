@@ -12,8 +12,8 @@
             stateChangeError: true,
             fallbackIp: null,
 
-            requestTransformer: null,
-            responseTransformer: null
+            transformRequest: null,
+            transformResponse: null
         };
 
         return {
@@ -23,8 +23,6 @@
                 $httpProvider.interceptors.push(["$rootScope", "$q", "$injector", function($rootScope, $q, $injector) {
                     return {
                         request: function(req) {
-                            //console.log(req);
-
                             $rootScope.$broadcast('loading:show');
 
                             if ( _config.authorizationToken ) {
@@ -61,19 +59,22 @@
                         }
                     }
                 }]);
-
-                if (_config.requestTransformer) {
-                    $httpProvider.defaults.transformRequest.push(_config.requestTransformer);
+                //
+                // User configurable transformers
+                //
+                if (_config.transformRequest) {
+                    $httpProvider.defaults.transformRequest.push(_config.transformRequest);
                 }
-                if (_config.responseTransformer) {
-                    $httpProvider.defaults.transformResponse.push(_config.responseTransformer);
+                if (_config.transformResponse) {
+                    $httpProvider.defaults.transformResponse.push(_config.transformResponse);
                 }
             },
             $get: [
                 '$ionicPopup',
                 '$ionicLoading',
                 '$rootScope',
-                function($ionicPopup, $ionicLoading, $rootScope) {
+                '$http',
+                function($ionicPopup, $ionicLoading, $rootScope, $http) {
 
                     var _ajaxRequestsInQ = 0;
 
