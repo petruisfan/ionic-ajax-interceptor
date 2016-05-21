@@ -31,7 +31,11 @@ angular.module('app', ['ionic', 'ionic-ajax-interceptor'])
     .config(function( AjaxInterceptorProvider ) {
         AjaxInterceptorProvider.config({
             title: "Bummer",
-            defaultMessage: "I crashed :("
+            defaultMessage: "I crashed :(",
+            transformRequest: function(data) {
+                data.someKey = "Some value:";
+                return data;
+            }
         });
     }))
     .run(function (AjaxInterceptor) {
@@ -95,6 +99,8 @@ If the resolve failed and the error argument has a "message" key, it will be sho
 | iCache | Object | null | Add caching capabilities |
 | iCache.key | string | request url | The key under which to save the response |
 | iCache.expires | timestamp | null | When should the cached data expire? Null = never |
+| transformRequest | function | null | Function applied to transform request. Must return the data |
+| transformResponse | function | null | Function applied to transform response. Must return the data |
 
 ## Methods
 
