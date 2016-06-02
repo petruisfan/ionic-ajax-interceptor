@@ -5,7 +5,7 @@ var uglify = require('gulp-uglify');
 var src = [
     './src/ionic-ajax-interceptor.module.js',
     './src/ionic-ajax-interceptor.provider.js',
-    './src/ihttp.js'
+    './src/ionic-ajax-interceptor.service.js'
 ];
 
 gulp.task('buildmin', function() {

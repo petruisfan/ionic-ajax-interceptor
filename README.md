@@ -55,7 +55,7 @@ var request = {
     }
 };
 
-iHttp(request).then(
+AjaxService.http(request).then(
     function success(res) {
         ...
     },
@@ -112,7 +112,11 @@ If the resolve failed and the error argument has a "message" key, it will be sho
 | showLoading | - | Show the loading screen. Useful for long running tasks or other remote operations like connecting to bluetooth |
 | hideLoading | - | Hide the loading screen |
 
-## iHttp
+## AjaxService
 
-iHttp is a service that can be used the same way as $http, but has the added cache functionality.
+AjaxService is a service that can be used the same way as $http, but has the added cache functionality.
+It has 3 methods:
+- http: replacement for $http
+- clearCache
+- config
 
