@@ -13,12 +13,14 @@
             //    expires: timestamp (null = never expire)
             // }
             //
+            var key, expires;
+
             if (options.iCache) {
                 //
                 // Determine key
                 //
-                var key = _prefix,
-                    expires = options.iCache.expires;
+                key = _prefix;
+                expires = options.iCache.expires;
 
                 if ( options.iCache.hasOwnProperty("key") ) {
                     key += options.iCache.key;
@@ -50,12 +52,13 @@
                     //
                     // Not found, so cache data
                     //
-                    var data = JSON.stringify({
-                        timestamp: expires,
-                        data: res.data
-                    });
-                    localStorage.setItem(key, data);
-
+                    if ( key ) {
+                        var data = JSON.stringify({
+                            timestamp: expires,
+                            data: res.data
+                        });
+                        localStorage.setItem(key, data);
+                    }
                     defer.resolve(res);
                 },
                 function error(err) {
