@@ -88,8 +88,8 @@ If the resolve failed and the error argument has a "message" key, it will be sho
 
 ## Available options:
 
-| Key  | Type | Defaul | Why? |
-| ---- | ---- | ------ | ---- |
+| Key  | Type | Default | Why? |
+| ---- | ---- | ------- | ---- |
 | stateChangeError | boolean | true | Show a ionic alert every time a "resolve" value failed to return in angular-ui-router. | 
 | title | string | Error | The title of the alert |
 | defaultMessage | string | Unknown error | The body of the alert | 
